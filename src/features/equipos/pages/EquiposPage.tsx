@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { EquipmentTable } from '../components/equipos/EquipmentTable';
 import { EquipmentForm } from '../components/equipos/EquipmentForm';
 import { SoftwareSnapshot } from '@/features/software/components/SoftwareSnapshot';
+import { HardwareSnapshot, HardwareSnapshotSkeleton } from '@/features/hardware/components/snapshot/HardwareSnapshot';
+import { useLatestHardware } from '@/features/hardware/hooks/useHardware';
 import { Monitor, Filter, Search, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -28,7 +30,11 @@ export default function EquiposPage() {
     const navigate = useNavigate();
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [selectedEquipment, setSelectedEquipment] = useState<EquipmentResponse | null>(null);
+    const [selectedHardwareEquipment, setSelectedHardwareEquipment] = useState<EquipmentResponse | null>(null);
     const { equipments, loading, refetch } = useEquipments();
+    const { snapshot: hardwareSnapshot, loading: hardwareLoading } = useLatestHardware(
+        selectedHardwareEquipment?.id ?? 0
+    );
 
     const handleCreateSuccess = () => {
         setIsCreateOpen(false);
@@ -105,7 +111,9 @@ export default function EquiposPage() {
                 equipments={equipments}
                 loading={loading}
                 onViewSoftware={setSelectedEquipment}
-                onViewHistory={(eq) => navigate(`/main/software/historial/${eq.id}`)}
+                onViewSoftwareHistory={(eq) => navigate(`/main/software/historial/${eq.id}`)}
+                onViewHardware={setSelectedHardwareEquipment}
+                onViewHardwareHistory={(eq) => navigate(`/main/hardware/historial/${eq.id}`)}
             />
 
             {/* Software analysis sheet */}
@@ -126,6 +134,34 @@ export default function EquiposPage() {
                                 equipmentId={selectedEquipment.id}
                                 equipmentName={`${selectedEquipment.name} — ${selectedEquipment.code}`}
                             />
+                        )}
+                    </div>
+                </SheetContent>
+            </Sheet>
+
+            {/* Hardware snapshot sheet */}
+            <Sheet
+                open={!!selectedHardwareEquipment}
+                onOpenChange={(open) => { if (!open) setSelectedHardwareEquipment(null); }}
+            >
+                <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+                    <SheetHeader>
+                        <SheetTitle>Hardware — Último Snapshot</SheetTitle>
+                        <SheetDescription>
+                            {selectedHardwareEquipment
+                                ? `${selectedHardwareEquipment.name} — ${selectedHardwareEquipment.code}`
+                                : 'Información de hardware del equipo.'}
+                        </SheetDescription>
+                    </SheetHeader>
+                    <div className="px-4 pt-2">
+                        {hardwareLoading && <HardwareSnapshotSkeleton />}
+                        {!hardwareLoading && hardwareSnapshot && (
+                            <HardwareSnapshot snapshot={hardwareSnapshot} />
+                        )}
+                        {!hardwareLoading && !hardwareSnapshot && (
+                            <p className="text-sm text-gray-400 italic pt-4">
+                                Sin datos de hardware disponibles.
+                            </p>
                         )}
                     </div>
                 </SheetContent>

@@ -21,6 +21,7 @@ import {
     Trash2,
     ScanSearch,
     History,
+    Cpu,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -44,10 +45,19 @@ interface EquipmentTableProps {
     equipments: EquipmentResponse[];
     loading: boolean;
     onViewSoftware: (equipment: EquipmentResponse) => void;
-    onViewHistory: (equipment: EquipmentResponse) => void;
+    onViewSoftwareHistory: (equipment: EquipmentResponse) => void;
+    onViewHardware: (equipment: EquipmentResponse) => void;
+    onViewHardwareHistory: (equipment: EquipmentResponse) => void;
 }
 
-export const EquipmentTable = ({ equipments, loading, onViewSoftware, onViewHistory }: EquipmentTableProps) => {
+export const EquipmentTable = ({
+    equipments,
+    loading,
+    onViewSoftware,
+    onViewSoftwareHistory,
+    onViewHardware,
+    onViewHardwareHistory,
+}: EquipmentTableProps) => {
     if (loading && equipments.length === 0) {
         return (
             <div className="space-y-4">
@@ -125,9 +135,8 @@ export const EquipmentTable = ({ equipments, loading, onViewSoftware, onViewHist
                                                 <MoreHorizontal className="h-4 w-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="w-48">
-                                            <DropdownMenuLabel>Gestión de Equipo</DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
+                                        <DropdownMenuContent align="end" className="w-52">
+                                            <DropdownMenuLabel>Software</DropdownMenuLabel>
                                             <DropdownMenuItem
                                                 className="cursor-pointer"
                                                 onClick={() => onViewSoftware(eq)}
@@ -137,11 +146,28 @@ export const EquipmentTable = ({ equipments, loading, onViewSoftware, onViewHist
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="cursor-pointer"
-                                                onClick={() => onViewHistory(eq)}
+                                                onClick={() => onViewSoftwareHistory(eq)}
                                             >
                                                 <History className="mr-2 h-4 w-4" />
-                                                Ver Historial
+                                                Historial Software
                                             </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuLabel>Hardware</DropdownMenuLabel>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewHardware(eq)}
+                                            >
+                                                <Cpu className="mr-2 h-4 w-4" />
+                                                Ver Hardware
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewHardwareHistory(eq)}
+                                            >
+                                                <History className="mr-2 h-4 w-4" />
+                                                Historial Hardware
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
                                             <DropdownMenuItem className="cursor-pointer">
                                                 <Info className="mr-2 h-4 w-4" />
                                                 Ver Detalles

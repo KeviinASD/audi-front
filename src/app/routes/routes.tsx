@@ -8,6 +8,7 @@ import EquiposPage from '@/features/equipos/pages/EquiposPage'
 import LabsPage from '@/features/equipos/pages/LabsPage'
 import AuthorizedSoftwarePage from '@/features/software/pages/AuthorizedSoftwarePage'
 import SoftwareHistoryPage from '@/features/software/pages/SoftwareHistoryPage'
+import HardwareHistoryPage from '@/features/hardware/pages/HardwareHistoryPage'
 
 export const router: RouteObject[] = [
     {
@@ -35,6 +36,7 @@ export const router: RouteObject[] = [
             { path: 'laboratorios', element: <LabsPage /> },
             { path: 'software', element: <AuthorizedSoftwarePage /> },
             { path: 'software/historial/:equipmentId', element: <SoftwareHistoryPage /> },
+            { path: 'hardware/historial/:equipmentId', element: <HardwareHistoryPage /> },
             { path: 'employee', element: <h1 className='text-xs'>DASHBOARD EMPLOYEE :3</h1> },
         ]
     }
