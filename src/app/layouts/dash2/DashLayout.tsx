@@ -14,18 +14,20 @@ function HeaderLayout() {
             <div className="flex-1 flex justify-between items-center gap-4">
                 <InputGroup className="max-w-xs">
                     <InputGroupInput placeholder="Search Keywoard..." />
+
                     <InputGroupAddon>
                         <Search size={16} />
                     </InputGroupAddon>
+
                 </InputGroup>
                 <div className="gap-2 flex">
                     {/* <UserAvatar /> */}
-                   <Button variant="outline" className="relative" size={"icon"}>
+                    <Button variant="outline" className="relative" size={"icon"}>
                         <Bell />
-                   </Button>
-                   <Button variant="outline" className="relative" size={"icon"}>
-                    <MousePointerClick />
-                   </Button>
+                    </Button>
+                    <Button variant="outline" className="relative" size={"icon"}>
+                        <MousePointerClick />
+                    </Button>
                 </div>
             </div>
         </header>
