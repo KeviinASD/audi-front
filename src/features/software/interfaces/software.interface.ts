@@ -19,11 +19,19 @@ export interface SoftwareInstalledResponse {
     createdAt: string;
 }
 
+export interface SnapshotHistoryEntry {
+    capturedAt: string;
+    totalItems: number;
+    riskyCount: number;
+    unlicensedCount: number;
+    items: SoftwareInstalledResponse[];
+}
+
 export interface CreateAuthorizedSoftwareRequest {
     name: string;
     publisher?: string;
     description?: string;
-    laboratoryId?: number; // null = applies to all laboratories
+    laboratoryId?: number;
 }
 
 export interface AuthorizedSoftwareResponse {

@@ -7,6 +7,7 @@ import DashLayout from '../layouts/dash2/DashLayout'
 import EquiposPage from '@/features/equipos/pages/EquiposPage'
 import LabsPage from '@/features/equipos/pages/LabsPage'
 import AuthorizedSoftwarePage from '@/features/software/pages/AuthorizedSoftwarePage'
+import SoftwareHistoryPage from '@/features/software/pages/SoftwareHistoryPage'
 
 export const router: RouteObject[] = [
     {
@@ -33,6 +34,7 @@ export const router: RouteObject[] = [
             { path: 'equipos', element: <EquiposPage /> },
             { path: 'laboratorios', element: <LabsPage /> },
             { path: 'software', element: <AuthorizedSoftwarePage /> },
+            { path: 'software/historial/:equipmentId', element: <SoftwareHistoryPage /> },
             { path: 'employee', element: <h1 className='text-xs'>DASHBOARD EMPLOYEE :3</h1> },
         ]
     }

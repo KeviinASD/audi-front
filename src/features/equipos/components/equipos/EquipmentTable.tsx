@@ -20,6 +20,7 @@ import {
     Building2,
     Trash2,
     ScanSearch,
+    History,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -43,9 +44,10 @@ interface EquipmentTableProps {
     equipments: EquipmentResponse[];
     loading: boolean;
     onViewSoftware: (equipment: EquipmentResponse) => void;
+    onViewHistory: (equipment: EquipmentResponse) => void;
 }
 
-export const EquipmentTable = ({ equipments, loading, onViewSoftware }: EquipmentTableProps) => {
+export const EquipmentTable = ({ equipments, loading, onViewSoftware, onViewHistory }: EquipmentTableProps) => {
     if (loading && equipments.length === 0) {
         return (
             <div className="space-y-4">
@@ -132,6 +134,13 @@ export const EquipmentTable = ({ equipments, loading, onViewSoftware }: Equipmen
                                             >
                                                 <ScanSearch className="mr-2 h-4 w-4" />
                                                 Analizar Software
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewHistory(eq)}
+                                            >
+                                                <History className="mr-2 h-4 w-4" />
+                                                Ver Historial
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="cursor-pointer">
                                                 <Info className="mr-2 h-4 w-4" />
