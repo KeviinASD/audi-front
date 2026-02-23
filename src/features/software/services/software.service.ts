@@ -11,11 +11,13 @@ export class SoftwareService {
         return res.data;
     }
 
+    static async getAuthorizedSoftware(): Promise<AuthorizedSoftwareResponse[]> {
+        const res = await api.get<AuthorizedSoftwareResponse[]>(`${BASE_URL}/whitelist`);
+        return res.data;
+    }
+
     static async addToWhitelist(data: CreateAuthorizedSoftwareRequest): Promise<AuthorizedSoftwareResponse> {
-        const res = await api.post<AuthorizedSoftwareResponse>(
-            `${BASE_URL}/whitelist`,
-            data
-        );
+        const res = await api.post<AuthorizedSoftwareResponse>(`${BASE_URL}/whitelist`, data);
         return res.data;
     }
 }

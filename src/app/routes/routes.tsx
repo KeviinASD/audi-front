@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
+import { Navigate, type RouteObject } from 'react-router-dom'
 import Login from '@/features/auth/pages/Login'
 import { PrivateRoute } from '../routes/PrivateRoute'
 import { PublicRoute } from '../routes/PublicRoute'
@@ -6,6 +6,7 @@ import DashLayout from '../layouts/dash2/DashLayout'
 
 import EquiposPage from '@/features/equipos/pages/EquiposPage'
 import LabsPage from '@/features/equipos/pages/LabsPage'
+import AuthorizedSoftwarePage from '@/features/software/pages/AuthorizedSoftwarePage'
 
 export const router: RouteObject[] = [
     {
@@ -31,6 +32,7 @@ export const router: RouteObject[] = [
             { path: 'dashboard', element: <h1 className='text-xs'>DASHBOARD HOME :3</h1> },
             { path: 'equipos', element: <EquiposPage /> },
             { path: 'laboratorios', element: <LabsPage /> },
+            { path: 'software', element: <AuthorizedSoftwarePage /> },
             { path: 'employee', element: <h1 className='text-xs'>DASHBOARD EMPLOYEE :3</h1> },
         ]
     }
