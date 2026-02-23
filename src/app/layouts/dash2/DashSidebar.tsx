@@ -274,7 +274,7 @@ export function DashSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
 
 
 export function VersionSwitcher({
-    versions,
+    versions: _versions,
     defaultVersion,
 }: {
     versions: string[]
