@@ -1,1 +1,2 @@
-export * from './equipos.interface.ts';
+export * from './equipment.interface';
+export * from './laboratory.interface';

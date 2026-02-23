@@ -1,6 +1,7 @@
-import { createBrowserRouter, Outlet, type RouteObject } from 'react-router-dom'
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
 import Login from '@/features/auth/pages/Login'
 import { PrivateRoute } from '../routes/PrivateRoute'
+import { PublicRoute } from '../routes/PublicRoute'
 import DashLayout from '../layouts/dash2/DashLayout'
 
 import EquiposPage from '@/features/equipos/pages/EquiposPage'
@@ -8,8 +9,12 @@ import LabsPage from '@/features/equipos/pages/LabsPage'
 
 export const router: RouteObject[] = [
     {
+        path: '/',
+        element: <Navigate to="/auth/login" replace />
+    },
+    {
         path: '/auth',
-        element: <Outlet />,
+        element: <PublicRoute />,
         children: [
             { path: 'login', element: <Login /> },
             { path: 'register', element: <h1>Register</h1> }

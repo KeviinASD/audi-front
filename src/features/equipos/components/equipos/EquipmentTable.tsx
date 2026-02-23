@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useEquiposStore } from '../../store/equipos.store';
 import {
     Table,
     TableBody,
@@ -7,23 +5,22 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Monitor,
     MoreHorizontal,
-    MonitorIcon,
-    Cpu,
-    Network,
+    MapPin,
     Clock,
-    User,
     CheckCircle2,
     AlertCircle,
     XCircle,
     Info,
-    Building2
-} from "lucide-react";
+    Building2,
+    Trash2,
+    ScanSearch,
+} from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,26 +28,25 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton";
-import { type EquipmentStatus } from '../../interfaces';
+} from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
+import type { EquipmentResponse, EquipmentStatus } from '../../interfaces';
 
-const statusConfig: Record<EquipmentStatus, { label: string, color: string, icon: any }> = {
-    online: { label: 'Online', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400', icon: CheckCircle2 },
-    offline: { label: 'Offline', color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400', icon: XCircle },
-    warning: { label: 'Warning', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400', icon: AlertCircle },
-    critical: { label: 'Critical', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', icon: Info },
-    unknown: { label: 'Unknown', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: Info },
+const statusConfig: Record<EquipmentStatus, { label: string; color: string; icon: any }> = {
+    'operativo': { label: 'Operativo', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400', icon: CheckCircle2 },
+    'degradado': { label: 'Degradado', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',         icon: AlertCircle  },
+    'critico':   { label: 'Crítico',   color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',                 icon: XCircle      },
+    'sin-datos': { label: 'Sin datos', color: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',                icon: Info         },
 };
 
-export const EquipmentTable = () => {
-    const { equipos, loading, fetchEquipos } = useEquiposStore();
+interface EquipmentTableProps {
+    equipments: EquipmentResponse[];
+    loading: boolean;
+    onViewSoftware: (equipment: EquipmentResponse) => void;
+}
 
-    useEffect(() => {
-        fetchEquipos();
-    }, [fetchEquipos]);
-
-    if (loading && equipos.length === 0) {
+export const EquipmentTable = ({ equipments, loading, onViewSoftware }: EquipmentTableProps) => {
+    if (loading && equipments.length === 0) {
         return (
             <div className="space-y-4">
                 <Skeleton className="h-12 w-full" />
@@ -64,17 +60,17 @@ export const EquipmentTable = () => {
             <Table>
                 <TableHeader className="bg-gray-50/50 dark:bg-[#1F1F23]/50">
                     <TableRow>
-                        <TableHead className="w-[250px]">Equipo</TableHead>
+                        <TableHead className="w-[260px]">Equipo</TableHead>
                         <TableHead>Estado</TableHead>
-                        <TableHead>S.O. / IP</TableHead>
+                        <TableHead>Ubicación</TableHead>
                         <TableHead>Laboratorio</TableHead>
-                        <TableHead>Última Conexión</TableHead>
+                        <TableHead>Última conexión</TableHead>
                         <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {equipos.map((eq) => {
-                        const status = statusConfig[eq.status] || statusConfig.unknown;
+                    {equipments.map((eq) => {
+                        const status = statusConfig[eq.status] ?? statusConfig['sin-datos'];
                         const StatusIcon = status.icon;
 
                         return (
@@ -85,11 +81,8 @@ export const EquipmentTable = () => {
                                             <Monitor className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-medium text-gray-900 dark:text-gray-100">{eq.hostname}</span>
-                                            <span className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                                                <User className="h-3 w-3" />
-                                                {eq.currentUser || 'Desconectado'}
-                                            </span>
+                                            <span className="font-medium text-gray-900 dark:text-gray-100">{eq.name}</span>
+                                            <span className="text-xs text-gray-400 font-mono mt-0.5">{eq.code}</span>
                                         </div>
                                     </div>
                                 </TableCell>
@@ -100,20 +93,15 @@ export const EquipmentTable = () => {
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
-                                    <div className="flex flex-col gap-0.5">
-                                        <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300">
-                                            <MonitorIcon className="h-3 w-3" />
-                                            {eq.osVersion?.split(' ').slice(0, 3).join(' ') || 'N/A'}
-                                        </div>
-                                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                                            <Network className="h-3 w-3" />
-                                            {eq.ipAddress || '0.0.0.0'}
-                                        </div>
+                                    <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-300">
+                                        <MapPin className="h-3 w-3 shrink-0" />
+                                        {eq.ubication || <span className="italic text-gray-400">Sin ubicación</span>}
                                     </div>
                                 </TableCell>
                                 <TableCell>
                                     {eq.laboratory ? (
-                                        <Badge variant="outline" className="font-normal border-gray-200 dark:border-gray-700">
+                                        <Badge variant="outline" className="font-normal border-gray-200 dark:border-gray-700 flex items-center gap-1 w-fit">
+                                            <Building2 className="h-3 w-3" />
                                             {eq.laboratory.name}
                                         </Badge>
                                     ) : (
@@ -123,7 +111,9 @@ export const EquipmentTable = () => {
                                 <TableCell>
                                     <div className="flex items-center gap-1.5 text-xs text-gray-500">
                                         <Clock className="h-3 w-3" />
-                                        {eq.lastSeenAt ? new Date(eq.lastSeenAt).toLocaleString() : 'Nunca'}
+                                        {eq.lastConnection
+                                            ? new Date(eq.lastConnection).toLocaleString()
+                                            : 'Nunca'}
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-right">
@@ -136,6 +126,13 @@ export const EquipmentTable = () => {
                                         <DropdownMenuContent align="end" className="w-48">
                                             <DropdownMenuLabel>Gestión de Equipo</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewSoftware(eq)}
+                                            >
+                                                <ScanSearch className="mr-2 h-4 w-4" />
+                                                Analizar Software
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem className="cursor-pointer">
                                                 <Info className="mr-2 h-4 w-4" />
                                                 Ver Detalles
@@ -146,7 +143,7 @@ export const EquipmentTable = () => {
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem className="cursor-pointer text-red-600 dark:text-red-400">
-                                                <XCircle className="mr-2 h-4 w-4" />
+                                                <Trash2 className="mr-2 h-4 w-4" />
                                                 Eliminar
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
@@ -155,7 +152,7 @@ export const EquipmentTable = () => {
                             </TableRow>
                         );
                     })}
-                    {equipos.length === 0 && (
+                    {equipments.length === 0 && (
                         <TableRow>
                             <TableCell colSpan={6} className="h-24 text-center text-gray-500">
                                 No hay equipos registrados

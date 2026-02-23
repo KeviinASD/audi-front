@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useEquiposStore } from '../../store/equipos.store';
 import {
     Table,
     TableBody,
@@ -14,7 +12,6 @@ import {
     Edit,
     Trash2,
     MoreHorizontal,
-    Plus,
     Building2,
     Mail,
     User
@@ -28,15 +25,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { LaboratoryResponse } from '../../interfaces';
 
-export const LabTable = () => {
-    const { laboratorios, loading, fetchLaboratorios } = useEquiposStore();
+interface LabTableProps {
+    laboratories: LaboratoryResponse[];
+    loading: boolean;
+}
 
-    useEffect(() => {
-        fetchLaboratorios();
-    }, [fetchLaboratorios]);
-
-    if (loading && laboratorios.length === 0) {
+export const LabTable = ({ laboratories, loading }: LabTableProps) => {
+    if (loading && laboratories.length === 0) {
         return (
             <div className="space-y-4">
                 <Skeleton className="h-12 w-full" />
@@ -58,7 +55,7 @@ export const LabTable = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {laboratorios.map((lab) => (
+                    {laboratories.map((lab) => (
                         <TableRow key={lab.id} className="hover:bg-gray-50/50 dark:hover:bg-[#1F1F23]/30 transition-colors">
                             <TableCell>
                                 <div className="flex flex-col">
@@ -88,7 +85,10 @@ export const LabTable = () => {
                                 )}
                             </TableCell>
                             <TableCell>
-                                <Badge variant={lab.isActive ? "default" : "secondary"} className={lab.isActive ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400" : ""}>
+                                <Badge
+                                    variant={lab.isActive ? "default" : "secondary"}
+                                    className={lab.isActive ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400" : ""}
+                                >
                                     {lab.isActive ? "Activo" : "Inactivo"}
                                 </Badge>
                             </TableCell>
@@ -115,7 +115,7 @@ export const LabTable = () => {
                             </TableCell>
                         </TableRow>
                     ))}
-                    {laboratorios.length === 0 && (
+                    {laboratories.length === 0 && (
                         <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center text-gray-500">
                                 No hay laboratorios registrados

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LaboratorySchema, type LaboratorySchemaType } from "../../schemas/equipos.schema";
-import { useEquiposStore } from "../../store/equipos.store";
+import { useLaboratoryActions } from "../../hooks/useLaboratory";
 import {
     Form,
     FormControl,
@@ -20,7 +20,7 @@ interface LabFormProps {
 }
 
 export const LabForm = ({ onSuccess, initialData }: LabFormProps) => {
-    const { createLaboratorio, updateLaboratorio } = useEquiposStore();
+    const { createLaboratory, updateLaboratory } = useLaboratoryActions(onSuccess);
 
     const form = useForm<LaboratorySchemaType>({
         resolver: zodResolver(LaboratorySchema),
@@ -33,15 +33,10 @@ export const LabForm = ({ onSuccess, initialData }: LabFormProps) => {
     });
 
     const onSubmit = async (data: LaboratorySchemaType) => {
-        let success = false;
         if (initialData?.id) {
-            success = await updateLaboratorio(initialData.id, data);
+            await updateLaboratory(initialData.id, data);
         } else {
-            success = await createLaboratorio(data);
-        }
-
-        if (success && onSuccess) {
-            onSuccess();
+            await createLaboratory(data);
         }
     };
 

@@ -11,9 +11,16 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import { useLaboratories } from "../hooks/useLaboratory";
 
 export default function LabsPage() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const { laboratories, loading, refetch } = useLaboratories();
+
+    const handleSuccess = () => {
+        setIsDialogOpen(false);
+        refetch();
+    };
 
     return (
         <div className="flex flex-col gap-6 p-6 animate-in fade-in duration-500">
@@ -42,13 +49,13 @@ export default function LabsPage() {
                                 Completa los datos para el nuevo laboratorio o sala de cómputo.
                             </DialogDescription>
                         </DialogHeader>
-                        <LabForm onSuccess={() => setIsDialogOpen(false)} />
+                        <LabForm onSuccess={handleSuccess} />
                     </DialogContent>
                 </Dialog>
             </div>
 
             <div className="grid grid-cols-1 gap-6">
-                <LabTable />
+                <LabTable laboratories={laboratories} loading={loading} />
             </div>
         </div>
     );

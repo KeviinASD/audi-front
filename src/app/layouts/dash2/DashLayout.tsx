@@ -11,22 +11,6 @@ function HeaderLayout() {
     return (
         <header className="flex h-16 shrink-0 items-center gap-2 border-b-2 px-4 sticky top-0 z-10 bg-background w-full">
             <SidebarTrigger className="-ml-1" />
-            {/* <Separator orientation="vertical" className="mr-2 h-4" /> */}
-            {/* <Breadcrumb>
-                <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="#">components</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block" />
-                    <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="#">ui</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block" />
-                    <BreadcrumbItem>
-                        <BreadcrumbPage>button.tsx</BreadcrumbPage>
-                    </BreadcrumbItem>
-                </BreadcrumbList>
-            </Breadcrumb> */}
             <div className="flex-1 flex justify-between items-center gap-4">
                 <InputGroup className="max-w-xs">
                     <InputGroupInput placeholder="Search Keywoard..." />
