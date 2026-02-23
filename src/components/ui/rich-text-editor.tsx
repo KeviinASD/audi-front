@@ -174,7 +174,7 @@ const RichTextEditor = ({
   content,
   onChange,
   className,
-  placeholder = "Write something..."
+  placeholder: _placeholder = "Write something..."
 }: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: [StarterKit, /* TextStyleKit */],

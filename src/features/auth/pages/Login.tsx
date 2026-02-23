@@ -1,180 +1,145 @@
-import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Lock, Mail } from "lucide-react";
-import React from "react";
+import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LoginSchema, type LoginSchemaType } from "../schemas/login.schema";
 import { useAuthStore } from "../store/auth.store";
-import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom';
+import { LoginBackground } from "../components/LoginBackground";
+import { LoginHeader } from "../components/LoginHeader";
+import { LoginFooter } from "../components/LoginFooter";
 
 function AuthForm() {
     const navigate = useNavigate();
     const { login, loading } = useAuthStore();
+    const [showPassword, setShowPassword] = useState(false);
+
     const form = useForm<LoginSchemaType>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
             email: '',
             password: '',
         }
-    })
+    });
 
     const handleSubmit = async (data: LoginSchemaType) => {
         const success = await login(data);
         if (success) {
             navigate('/main', { replace: true });
         }
-    }
+    };
 
     return (
         <Form {...form}>
-            <form action="" onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 w-full">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="p-8 pt-4 space-y-5">
+                {/* Username Field */}
                 <FormField
                     control={form.control}
-                    name={"email"}
+                    name="email"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
+                        <FormItem className="space-y-2">
+                            <FormLabel className="text-sm font-medium text-slate-300">
+                                Institutional Email or Username
+                            </FormLabel>
                             <FormControl>
-                                <Input placeholder="Email" {...field}
-                                    className="h-10"
-                                />
+                                <div className="relative group">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-[#C4A84C] transition-colors" />
+                                    <Input
+                                        {...field}
+                                        placeholder="e.g. jdoe@unitru.edu.pe"
+                                        className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-[#C4A84C] focus:border-transparent text-white placeholder:text-slate-500 transition-all outline-none h-12"
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                {/* <FormField
-                    control={form.control}
-                    name={"email"}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <InputGroup {...field} className="h-10">
-                                    <InputGroupInput placeholder="Email" type="email" {...field} />
-                                    <InputGroupAddon>
-                                        <Mail size={16} />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
+
+                {/* Password Field */}
                 <FormField
                     control={form.control}
-                    name={"password"}
+                    name="password"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
+                        <FormItem className="space-y-2">
+                            <div className="flex justify-between items-center">
+                                <FormLabel className="text-sm font-medium text-slate-300">
+                                    Password
+                                </FormLabel>
+                            </div>
                             <FormControl>
-                                <InputGroup className="h-10">
-                                    <InputGroupInput placeholder="Password" type="password" {...field} />
-                                    <InputGroupAddon>
-                                        <Lock size={16} />
-                                    </InputGroupAddon>
-                                </InputGroup>
+                                <div className="relative group">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-[#C4A84C] transition-colors" />
+                                    <Input
+                                        {...field}
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="••••••••"
+                                        className="w-full pl-11 pr-12 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-[#C4A84C] focus:border-transparent text-white placeholder:text-slate-500 transition-all outline-none h-12"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit" disabled={loading} className="w-full h-12 transition-all">
-                    {loading ? 'Logging in...' : 'Login'}
-                </Button>
+
+                {/* Remember & Forgot */}
+                <div className="flex items-center justify-between text-sm">
+                    <label className="flex items-center space-x-2 cursor-pointer group">
+                        <input
+                            type="checkbox"
+                            className="rounded border-white/20 bg-white/5 text-[#C4A84C] focus:ring-[#C4A84C] focus:ring-offset-[#050a14]"
+                        />
+                        <span className="text-slate-400 group-hover:text-slate-200 transition-colors">Remember me</span>
+                    </label>
+                    <a className="text-[#C4A84C] hover:text-[#C4A84C]/80 font-medium transition-colors" href="#">
+                        Forgot password?
+                    </a>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                    disabled={loading}
+                    className="w-full bg-[#C4A84C] hover:bg-[#C4A84C]/90 text-[#003366] font-bold py-3.5 rounded-lg shadow-lg shadow-[#C4A84C]/20 transition-all transform active:scale-[0.98] uppercase tracking-wider text-sm flex items-center justify-center gap-2"
+                    type="submit"
+                >
+                    {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                    {loading ? 'Accessing...' : 'Access System'}
+                </button>
+
+                {/* Help Link */}
+                <div className="text-center pt-2">
+                    <p className="text-xs text-slate-500">
+                        Need assistance? <a className="text-slate-300 underline underline-offset-4 hover:text-white" href="#">Contact IT Support</a>
+                    </p>
+                </div>
             </form>
         </Form>
-    )
-}
-
-function AuthGoogle() {
-    const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
-    function GoogleIcon() {
-        return (
-            <svg
-                className="mr-2 h-4 w-4"
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fab"
-                data-icon="google"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 488 512"
-            >
-                <path
-                    fill="currentColor"
-                    d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-                ></path>
-            </svg>
-        )
-    }
-
-    async function handleGoogleSignIn() {
-        setIsGoogleLoading(true);
-        try {
-
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-        } catch (error) {
-
-        } finally {
-            setIsGoogleLoading(false);
-        }
-    }
-
-    return (
-        <div>
-            <Button variant="outline" className="w-full h-12 font-medium transition-all"
-                onClick={handleGoogleSignIn}
-            >
-                {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
-                {isGoogleLoading ? 'Connecting...' : 'Sign in with Google'}
-            </Button>
-        </div>
-    )
-}
-
-function AuthCard() {
-
-    const spearatorAuth = () => {
-        return (
-            <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full border-neutral-200 dark:border-neutral-800" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white dark:bg-black px-2 text-neutral-600 dark:text-neutral-400">Or continue with</span>
-                </div>
-            </div>
-        )
-    }
-
-    return (
-        <div className="max-w-lg w-full flex flex-col gap-6 p-4">
-            <div>
-                <h1 className="font-bold text-2xl">Welcome Back</h1>
-                <p className="text-muted-foreground text-sm">Enter your credentials to access your account</p>
-            </div>
-            <AuthForm />
-            {spearatorAuth()}
-            <AuthGoogle />
-        </div>
-    )
+    );
 }
 
 export default function Login() {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 h-screen">
-            <div className="flex items-center justify-center">
-                <AuthCard />
-            </div>
-            <div className="hidden lg:block bg-gradient-to-b from-amber-200 to-amber-400/50">
+        <div className="min-h-screen flex flex-col relative">
+            <LoginBackground />
 
-            </div>
+            <main className="relative z-30 flex-1 flex flex-col items-center justify-center p-4">
+                <div className="w-full max-w-[440px] glass-panel rounded-xl shadow-2xl overflow-hidden">
+                    <LoginHeader />
+                    <AuthForm />
+                </div>
+            </main>
+
+            <LoginFooter />
         </div>
     );
 }
