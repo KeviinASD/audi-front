@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EquipmentTable } from '../components/equipos/EquipmentTable';
 import { EquipmentForm } from '../components/equipos/EquipmentForm';
 import { SoftwareSnapshot } from '@/features/software/components/SoftwareSnapshot';
@@ -24,6 +25,7 @@ import { useEquipments } from '../hooks/useEquipment';
 import type { EquipmentResponse } from '../interfaces';
 
 export default function EquiposPage() {
+    const navigate = useNavigate();
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [selectedEquipment, setSelectedEquipment] = useState<EquipmentResponse | null>(null);
     const { equipments, loading, refetch } = useEquipments();
@@ -103,6 +105,7 @@ export default function EquiposPage() {
                 equipments={equipments}
                 loading={loading}
                 onViewSoftware={setSelectedEquipment}
+                onViewHistory={(eq) => navigate(`/main/software/historial/${eq.id}`)}
             />
 
             {/* Software analysis sheet */}
