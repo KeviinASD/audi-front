@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Login - Sistema de Auditoría de Seguridad Informática UNT</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#003366",
+                        "accent": "#C4A84C",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#050a14",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+
+        .bg-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(196, 168, 76, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .glass-panel {
+            background: rgba(15, 25, 35, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+    <!-- Hero Background with Overlay -->
+    <div class="fixed inset-0 z-0 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/95 via-background-dark/90 to-background-dark z-10">
+        </div>
+        <img alt="Universidad Nacional de Trujillo Campus" class="w-full h-full object-cover"
+            data-alt="Wide shot of a prestigious university campus building at dusk"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFd5OSf_imRyHVp3K4OhciaxZg0nTDkt4OW21sMyZ5k1AN3F4T1d2MNFHtEggVL-uwAwVKm5Ihd_Nlm9lZufPVHa0tOTLy9jLphoi38b20O-MVze7uxj2BqDJI9jts5QLKLvIDyEx9Nk2szW00NzGb_PYpORMwPPN19CBFDa_l6p11fu-67jMfnRu4yOZNwQ3fSrqnlKbbMYTBE9stBw0ilYzjRhX4Lz3Zz3g3r8CWnn9gW1qCP424nTCGYT4P9HYgAOrvYk6GyCpO" />
+        <div class="absolute inset-0 bg-pattern z-20"></div>
+    </div>
+    <!-- Main Content -->
+    <main class="relative z-30 flex-1 flex flex-col items-center justify-center p-4">
+        <!-- Login Card -->
+        <div class="w-full max-w-[440px] glass-panel rounded-xl shadow-2xl overflow-hidden">
+            <!-- Card Header / Branding -->
+            <div class="p-8 pb-4 text-center">
+                <div class="flex justify-center mb-6">
+                    <div class="w-20 h-20 bg-white rounded-full p-2 flex items-center justify-center shadow-lg">
+                        <img alt="Logo UNT" class="max-w-full max-h-full"
+                            data-alt="Official seal of the National University of Trujillo"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLUko8ZaWDJQJLDAZ0KIsGoYvC_Y2dRI1ZyE6cinJzOdiu5I-XQrhvM7liMS1ZidvH4chXkh5ARhEE1ynVMGCHaX2h3KHnd4CxdAUOFH34TYeEGAi6ykFXCXqk1uVa-gFWuwSdkwj9soGfYu0zRtvcX0gUu7i9eSd9qLOoH3qmqEQbcpNSckCBnrgKohcv8w5BW6FtvZ7q0cbMuQsbKnKXVhKc8Pg7Df1gaRwV30uWwcAABCdU8wuXMFaI0wDWp3ZmpvOvjhyAlHE0" />
+                    </div>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-white mb-1">
+                    Sistema de Auditoría de Seguridad
+                </h1>
+                <p class="text-accent font-medium text-sm tracking-widest uppercase">
+                    Universidad Nacional de Trujillo
+                </p>
+            </div>
+            <!-- Login Form -->
+            <form class="p-8 pt-4 space-y-5">
+                <!-- Username Field -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-slate-300" for="username">
+                        Institutional Email or Username
+                    </label>
+                    <div class="relative group">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors">
+                            person
+                        </span>
+                        <input
+                            class="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder:text-slate-500 transition-all outline-none"
+                            id="username" placeholder="e.g. jdoe@unitru.edu.pe" type="text" />
+                    </div>
+                </div>
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-medium text-slate-300" for="password">
+                            Password
+                        </label>
+                    </div>
+                    <div class="relative group">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors">
+                            lock
+                        </span>
+                        <input
+                            class="w-full pl-11 pr-12 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder:text-slate-500 transition-all outline-none"
+                            id="password" placeholder="••••••••" type="password" />
+                        <button
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                            type="button">
+                            <span class="material-symbols-outlined">visibility</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Remember & Forgot -->
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center space-x-2 cursor-pointer group">
+                        <input
+                            class="rounded border-white/20 bg-white/5 text-accent focus:ring-accent focus:ring-offset-background-dark"
+                            type="checkbox" />
+                        <span class="text-slate-400 group-hover:text-slate-200 transition-colors">Remember me</span>
+                    </label>
+                    <a class="text-accent hover:text-accent/80 font-medium transition-colors" href="#">
+                        Forgot password?
+                    </a>
+                </div>
+                <!-- Submit Button -->
+                <button
+                    class="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-3.5 rounded-lg shadow-lg shadow-accent/20 transition-all transform active:scale-[0.98] uppercase tracking-wider text-sm"
+                    type="submit">
+                    Access System
+                </button>
+                <!-- Help Link -->
+                <div class="text-center pt-2">
+                    <p class="text-xs text-slate-500">
+                        Need assistance? <a class="text-slate-300 underline underline-offset-4 hover:text-white"
+                            href="#">Contact IT Support</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="relative z-30 w-full p-8 border-t border-white/5 bg-background-dark/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <!-- Institutional Info -->
+            <div class="flex flex-col items-center md:items-start space-y-1">
+                <p class="text-sm font-semibold text-white">Unidad de Tecnologías de Información (UTI)</p>
+                <p class="text-xs text-slate-500 uppercase tracking-widest">© 2024 Universidad Nacional de Trujillo</p>
+            </div>
+            <!-- Security Seals -->
+            <div class="flex items-center space-x-6">
+                <div
+                    class="flex items-center space-x-2 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                    <span class="material-symbols-outlined text-accent" style="font-size: 32px;">verified_user</span>
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-white leading-none">CERTIFIED</p>
+                        <p class="text-[10px] text-slate-400 leading-none">ISO/IEC 27001</p>
+                    </div>
+                </div>
+                <div class="h-8 w-[1px] bg-white/10 hidden md:block"></div>
+                <div
+                    class="flex items-center space-x-2 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                    <span class="material-symbols-outlined text-accent" style="font-size: 32px;">shield</span>
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-white leading-none">SECURE</p>
+                        <p class="text-[10px] text-slate-400 leading-none">SSL ENCRYPTED</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Policy Links -->
+            <div class="flex items-center space-x-4 text-xs font-medium text-slate-400">
+                <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+                <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+                <a class="hover:text-white transition-colors" href="#">Security Terms</a>
+                <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+                <a class="hover:text-white transition-colors" href="#">Institutional Portal</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

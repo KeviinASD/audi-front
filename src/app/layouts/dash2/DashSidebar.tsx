@@ -64,6 +64,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { AnimatePresence, motion } from "framer-motion"
+import { Image } from "@/components/ui/image"
 
 interface NavigationItem {
     id: string
@@ -131,12 +132,11 @@ export function DashSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                     className="h-16 px-2 flex items-center border-b border-gray-200 dark:border-[#1F1F23] justify-between"
                 >
                     <div className="flex items-center gap-3">
-                        <img
+                        <Image
                             src="https://i.pinimg.com/1200x/bb/00/fb/bb00fbabd0a58d0bc918cb8bd5664837.jpg"
                             alt="Acme"
-                            width={32}
-                            height={32}
-                            className="flex-shrink-0 block dark:hidden rounded-md"
+                            className="flex-shrink-0 block dark:hidden rounded-md h-8 w-8"
+                            containerClassName="h-8 w-8"
                         />
                         <span className="text-lg font-bold hover:cursor-pointer text-gray-900 dark:text-white">
                             FISIO LAB
