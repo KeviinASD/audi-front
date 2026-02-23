@@ -13,7 +13,7 @@ export const EquipmentSchema = z.object({
     code: z.string().min(1, "El código es requerido"),
     name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
     ubication: z.string().optional(),
-    laboratoryId: z.coerce.number().int().positive().optional(),
+    laboratoryId: z.number().int().positive().optional(),
     isActive: z.boolean().optional(),
 });
 

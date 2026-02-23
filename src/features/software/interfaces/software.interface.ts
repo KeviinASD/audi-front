@@ -18,3 +18,19 @@ export interface SoftwareInstalledResponse {
     isRisk: boolean;
     createdAt: string;
 }
+
+export interface CreateAuthorizedSoftwareRequest {
+    name: string;
+    publisher?: string;
+    description?: string;
+    laboratoryId?: number; // null = applies to all laboratories
+}
+
+export interface AuthorizedSoftwareResponse {
+    id: number;
+    name: string;
+    publisher?: string;
+    description?: string;
+    laboratoryId?: number;
+    createdAt: string;
+}
