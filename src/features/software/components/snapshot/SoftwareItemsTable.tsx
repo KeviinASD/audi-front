@@ -12,6 +12,7 @@ import { LicenseStatus } from '../../interfaces';
 import type { SoftwareInstalledResponse } from '../../interfaces';
 
 const licenseConfig: Record<LicenseStatus, { label: string; className: string }> = {
+    [LicenseStatus.FREE]:       { label: 'Gratuito',     className: 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400'                  },
     [LicenseStatus.LICENSED]:   { label: 'Licenciado',   className: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' },
     [LicenseStatus.UNLICENSED]: { label: 'Sin licencia', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'                 },
     [LicenseStatus.UNKNOWN]:    { label: 'Desconocido',  className: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'                 },
