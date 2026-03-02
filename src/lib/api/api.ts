@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, AxiosError } from 'axios';
 import { envConfig } from '../config/env';
 import { navigateTo } from '@/app/routes/navigate';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 
 export const AUTH_TOKEN_KEY = 'auth_token';
 
@@ -27,8 +28,8 @@ api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-        localStorage.removeItem(AUTH_TOKEN_KEY);
-        navigateTo("auth/login")
+        useAuthStore.getState().logout();   // limpia user en store + auth_token en localStorage
+        navigateTo('/auth/login');
     }
     return Promise.reject(error);
   }
