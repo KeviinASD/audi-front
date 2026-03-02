@@ -26,6 +26,7 @@ import {
     LogOut,
     Settings,
     MoreVertical,
+    Activity,
 } from "lucide-react"
 
 import {
@@ -80,6 +81,7 @@ const navigationItems: NavigationItem[] = [
     { id: "dashboard", name: "Resumen General", icon: LayoutDashboard, href: "/main/dashboard" },
     { id: "equipos", name: "Equipos", icon: Monitor, href: "/main/equipos" },
     { id: "laboratorios", name: "Laboratorios", icon: Building2, href: "/main/laboratorios" },
+    { id: "analisis", name: "Análisis", icon: Activity, href: "/main/analysis" },
     { id: "reportes", name: "Reportes (Ingest)", icon: FileText, href: "/main/reportes" },
     {
         id: "auditoria",

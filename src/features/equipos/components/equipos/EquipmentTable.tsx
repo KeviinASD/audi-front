@@ -22,6 +22,8 @@ import {
     ScanSearch,
     History,
     Cpu,
+    ShieldAlert,
+    Activity,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -48,6 +50,10 @@ interface EquipmentTableProps {
     onViewSoftwareHistory: (equipment: EquipmentResponse) => void;
     onViewHardware: (equipment: EquipmentResponse) => void;
     onViewHardwareHistory: (equipment: EquipmentResponse) => void;
+    onViewSecurity: (equipment: EquipmentResponse) => void;
+    onViewSecurityHistory: (equipment: EquipmentResponse) => void;
+    onViewPerformance: (equipment: EquipmentResponse) => void;
+    onViewPerformanceHistory: (equipment: EquipmentResponse) => void;
 }
 
 export const EquipmentTable = ({
@@ -57,6 +63,10 @@ export const EquipmentTable = ({
     onViewSoftwareHistory,
     onViewHardware,
     onViewHardwareHistory,
+    onViewSecurity,
+    onViewSecurityHistory,
+    onViewPerformance,
+    onViewPerformanceHistory,
 }: EquipmentTableProps) => {
     if (loading && equipments.length === 0) {
         return (
@@ -166,6 +176,38 @@ export const EquipmentTable = ({
                                             >
                                                 <History className="mr-2 h-4 w-4" />
                                                 Historial Hardware
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuLabel>Seguridad</DropdownMenuLabel>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewSecurity(eq)}
+                                            >
+                                                <ShieldAlert className="mr-2 h-4 w-4" />
+                                                Ver Seguridad
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewSecurityHistory(eq)}
+                                            >
+                                                <History className="mr-2 h-4 w-4" />
+                                                Historial Seguridad
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuLabel>Rendimiento</DropdownMenuLabel>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewPerformance(eq)}
+                                            >
+                                                <Activity className="mr-2 h-4 w-4" />
+                                                Ver Rendimiento
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="cursor-pointer"
+                                                onClick={() => onViewPerformanceHistory(eq)}
+                                            >
+                                                <History className="mr-2 h-4 w-4" />
+                                                Historial Rendimiento
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem className="cursor-pointer">

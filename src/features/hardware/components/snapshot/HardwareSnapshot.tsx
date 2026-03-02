@@ -62,14 +62,39 @@ interface HardwareSnapshotProps {
 
 export const HardwareSnapshot = ({ snapshot }: HardwareSnapshotProps) => {
     const ramUsedPercent = snapshot.ramTotalGB && snapshot.ramUsedGB
-        ? Math.round((snapshot.ramUsedGB / snapshot.ramTotalGB) * 100)
+        ? Math.round((Number(snapshot.ramUsedGB) / Number(snapshot.ramTotalGB)) * 100)
         : null;
 
     const diskUsedPercent = snapshot.diskCapacityGB && snapshot.diskUsedGB
-        ? Math.round((snapshot.diskUsedGB / snapshot.diskCapacityGB) * 100)
+        ? Math.round((Number(snapshot.diskUsedGB) / Number(snapshot.diskCapacityGB)) * 100)
         : null;
 
     const smart = smartConfig[snapshot.diskSmartStatus] ?? smartConfig[DiskSmartStatus.UNKNOWN];
+
+    // Mirrors backend calculateObsolescence() logic so the user sees the exact reasons
+    const currentYear = new Date().getFullYear();
+    const manufactureYearNum = snapshot.manufactureYear
+        ? parseInt(snapshot.manufactureYear.substring(0, 4))
+        : null;
+    const obsolescenceReasons: { label: string; detail: string }[] = [];
+    if (manufactureYearNum && (currentYear - manufactureYearNum) > 5) {
+        obsolescenceReasons.push({
+            label: 'Antigüedad',
+            detail: `Fabricado en ${manufactureYearNum} (${currentYear - manufactureYearNum} años)`,
+        });
+    }
+    if (snapshot.ramTotalGB != null && Number(snapshot.ramTotalGB) < 4) {
+        obsolescenceReasons.push({
+            label: 'RAM insuficiente',
+            detail: `${Number(snapshot.ramTotalGB).toFixed(1)} GB — mínimo recomendado: 4 GB`,
+        });
+    }
+    if (snapshot.diskType?.toUpperCase() === 'HDD') {
+        obsolescenceReasons.push({
+            label: 'Disco mecánico',
+            detail: 'Tipo HDD — se recomienda migrar a SSD',
+        });
+    }
 
     return (
         <div className="flex flex-col gap-4 pt-2">
@@ -79,12 +104,27 @@ export const HardwareSnapshot = ({ snapshot }: HardwareSnapshotProps) => {
                     <CalendarClock className="h-3.5 w-3.5" />
                     Snapshot capturado el {new Date(snapshot.capturedAt).toLocaleString()}
                 </div>
-                {/* {snapshot.isObsolete && (
+                {snapshot.isObsolete && obsolescenceReasons.length > 0 && (
+                    <div className="mt-1 px-3 py-2.5 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 space-y-1.5">
+                        <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-xs font-semibold">
+                            <AlertTriangle className="h-4 w-4 shrink-0" />
+                            Hardware por mejorar — aspectos detectados:
+                        </div>
+                        <ul className="space-y-1 pl-6">
+                            {obsolescenceReasons.map((r) => (
+                                <li key={r.label} className="text-xs text-amber-700 dark:text-amber-400 list-disc">
+                                    <span className="font-medium">{r.label}:</span> {r.detail}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                {snapshot.isObsolete && obsolescenceReasons.length === 0 && (
                     <div className="flex items-center gap-2 mt-1 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 text-xs">
                         <AlertTriangle className="h-4 w-4 shrink-0" />
-                        Este equipo está marcado como <strong>obsoleto</strong> (antigüedad &gt;5 años, RAM &lt;4 GB o disco HDD).
+                        Este equipo tiene hardware con mejoras pendientes.
                     </div>
-                )} */}
+                )}
             </div>
 
             {/* CPU */}

@@ -18,12 +18,18 @@ import {
     AlertTriangle,
     CalendarClock,
     CheckCircle2,
+    Info,
     Package,
     Search,
     ShieldAlert,
     ShieldCheck,
     ShieldOff,
 } from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -112,7 +118,17 @@ export const SoftwareSnapshot = ({ equipmentId, equipmentName }: SoftwareSnapsho
                 <div className="p-3 rounded-lg border border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-900/10 flex items-center gap-3">
                     <ShieldAlert className="h-5 w-5 text-red-500" />
                     <div>
-                        <p className="text-xs text-red-600 dark:text-red-400">En riesgo</p>
+                        <div className="flex items-center gap-1 flex-1 justify-between w-full">
+                            <p className="text-xs text-red-600 dark:text-red-400">En riesgo</p>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Info className="h-3 w-3 text-red-400 cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-56 text-center">
+                                    Un software se marca en riesgo si no tiene fecha de instalación registrada o si la fecha de instalación superó los 6 meses.
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
                         <p className="text-xl font-bold text-red-700 dark:text-red-400">{stats.risk}</p>
                     </div>
                 </div>

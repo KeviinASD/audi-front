@@ -5,6 +5,10 @@ import { EquipmentForm } from '../components/equipos/EquipmentForm';
 import { SoftwareSnapshot } from '@/features/software/components/SoftwareSnapshot';
 import { HardwareSnapshot, HardwareSnapshotSkeleton } from '@/features/hardware/components/snapshot/HardwareSnapshot';
 import { useLatestHardware } from '@/features/hardware/hooks/useHardware';
+import { SecuritySnapshot, SecuritySnapshotSkeleton } from '@/features/security/components/snapshot/SecuritySnapshot';
+import { useLatestSecurity } from '@/features/security/hooks/useSecurity';
+import { PerformanceSnapshot, PerformanceSnapshotSkeleton } from '@/features/performance/components/snapshot/PerformanceSnapshot';
+import { useLatestPerformance } from '@/features/performance/hooks/usePerformance';
 import { Monitor, Filter, Search, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -31,9 +35,17 @@ export default function EquiposPage() {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [selectedEquipment, setSelectedEquipment] = useState<EquipmentResponse | null>(null);
     const [selectedHardwareEquipment, setSelectedHardwareEquipment] = useState<EquipmentResponse | null>(null);
+    const [selectedSecurityEquipment, setSelectedSecurityEquipment] = useState<EquipmentResponse | null>(null);
+    const [selectedPerformanceEquipment, setSelectedPerformanceEquipment] = useState<EquipmentResponse | null>(null);
     const { equipments, loading, refetch } = useEquipments();
     const { snapshot: hardwareSnapshot, loading: hardwareLoading } = useLatestHardware(
         selectedHardwareEquipment?.id ?? 0
+    );
+    const { snapshot: securitySnapshot, loading: securityLoading } = useLatestSecurity(
+        selectedSecurityEquipment?.id ?? 0
+    );
+    const { snapshot: performanceSnapshot, loading: performanceLoading } = useLatestPerformance(
+        selectedPerformanceEquipment?.id ?? 0
     );
 
     const handleCreateSuccess = () => {
@@ -114,6 +126,10 @@ export default function EquiposPage() {
                 onViewSoftwareHistory={(eq) => navigate(`/main/software/historial/${eq.id}`)}
                 onViewHardware={setSelectedHardwareEquipment}
                 onViewHardwareHistory={(eq) => navigate(`/main/hardware/historial/${eq.id}`)}
+                onViewSecurity={setSelectedSecurityEquipment}
+                onViewSecurityHistory={(eq) => navigate(`/main/security/historial/${eq.id}`)}
+                onViewPerformance={setSelectedPerformanceEquipment}
+                onViewPerformanceHistory={(eq) => navigate(`/main/performance/historial/${eq.id}`)}
             />
 
             {/* Software analysis sheet */}
@@ -161,6 +177,61 @@ export default function EquiposPage() {
                         {!hardwareLoading && !hardwareSnapshot && (
                             <p className="text-sm text-gray-400 italic pt-4">
                                 Sin datos de hardware disponibles.
+                            </p>
+                        )}
+                    </div>
+                </SheetContent>
+            </Sheet>
+            {/* Performance snapshot sheet */}
+            <Sheet
+                open={!!selectedPerformanceEquipment}
+                onOpenChange={(open) => { if (!open) setSelectedPerformanceEquipment(null); }}
+            >
+                <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+                    <SheetHeader>
+                        <SheetTitle>Rendimiento — Último Snapshot</SheetTitle>
+                        <SheetDescription>
+                            {selectedPerformanceEquipment
+                                ? `${selectedPerformanceEquipment.name} — ${selectedPerformanceEquipment.code}`
+                                : 'Métricas de rendimiento del equipo.'}
+                        </SheetDescription>
+                    </SheetHeader>
+                    <div className="px-4 pt-2">
+                        {performanceLoading && <PerformanceSnapshotSkeleton />}
+                        {!performanceLoading && performanceSnapshot && (
+                            <PerformanceSnapshot snapshot={performanceSnapshot} />
+                        )}
+                        {!performanceLoading && !performanceSnapshot && (
+                            <p className="text-sm text-gray-400 italic pt-4">
+                                Sin datos de rendimiento disponibles.
+                            </p>
+                        )}
+                    </div>
+                </SheetContent>
+            </Sheet>
+
+            {/* Security snapshot sheet */}
+            <Sheet
+                open={!!selectedSecurityEquipment}
+                onOpenChange={(open) => { if (!open) setSelectedSecurityEquipment(null); }}
+            >
+                <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+                    <SheetHeader>
+                        <SheetTitle>Seguridad — Último Snapshot</SheetTitle>
+                        <SheetDescription>
+                            {selectedSecurityEquipment
+                                ? `${selectedSecurityEquipment.name} — ${selectedSecurityEquipment.code}`
+                                : 'Información de seguridad del equipo.'}
+                        </SheetDescription>
+                    </SheetHeader>
+                    <div className="px-4 pt-2">
+                        {securityLoading && <SecuritySnapshotSkeleton />}
+                        {!securityLoading && securitySnapshot && (
+                            <SecuritySnapshot snapshot={securitySnapshot} />
+                        )}
+                        {!securityLoading && !securitySnapshot && (
+                            <p className="text-sm text-gray-400 italic pt-4">
+                                Sin datos de seguridad disponibles.
                             </p>
                         )}
                     </div>

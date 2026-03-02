@@ -9,6 +9,12 @@ import LabsPage from '@/features/equipos/pages/LabsPage'
 import AuthorizedSoftwarePage from '@/features/software/pages/AuthorizedSoftwarePage'
 import SoftwareHistoryPage from '@/features/software/pages/SoftwareHistoryPage'
 import HardwareHistoryPage from '@/features/hardware/pages/HardwareHistoryPage'
+import SecurityRisksPage from '@/features/security/pages/SecurityRisksPage'
+import SecurityHistoryPage from '@/features/security/pages/SecurityHistoryPage'
+import PerformanceAlertsPage from '@/features/performance/pages/PerformanceAlertsPage'
+import PerformanceHistoryPage from '@/features/performance/pages/PerformanceHistoryPage'
+import AnalysisPage from '@/features/analysis/pages/AnalysisPage'
+import EquipmentDetailPage from '@/features/analysis/pages/EquipmentDetailPage'
 
 export const router: RouteObject[] = [
     {
@@ -37,6 +43,12 @@ export const router: RouteObject[] = [
             { path: 'software', element: <AuthorizedSoftwarePage /> },
             { path: 'software/historial/:equipmentId', element: <SoftwareHistoryPage /> },
             { path: 'hardware/historial/:equipmentId', element: <HardwareHistoryPage /> },
+            { path: 'security', element: <SecurityRisksPage /> },
+            { path: 'security/historial/:equipmentId', element: <SecurityHistoryPage /> },
+            { path: 'performance', element: <PerformanceAlertsPage /> },
+            { path: 'performance/historial/:equipmentId', element: <PerformanceHistoryPage /> },
+            { path: 'analysis', element: <AnalysisPage /> },
+            { path: 'analysis/equipo/:equipmentId', element: <EquipmentDetailPage /> },
             { path: 'employee', element: <h1 className='text-xs'>DASHBOARD EMPLOYEE :3</h1> },
         ]
     }
