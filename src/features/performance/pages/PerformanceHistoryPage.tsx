@@ -120,7 +120,7 @@ export default function PerformanceHistoryPage() {
     const navigate = useNavigate();
     const id = Number(equipmentId);
 
-    const { data: equipment, loading: equipmentLoading } = useEquipmentById(id);
+    const { equipment, loading: equipmentLoading } = useEquipmentById(id);
     const [rangeDays, setRangeDays] = useState(7);
 
     const { from, to } = useMemo(() => {
