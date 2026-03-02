@@ -1,4 +1,5 @@
 export const LicenseStatus = {
+    FREE:       'free',
     LICENSED:   'licensed',
     UNLICENSED: 'unlicensed',
     UNKNOWN:    'unknown',

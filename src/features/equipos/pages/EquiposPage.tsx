@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EquipmentTable } from '../components/equipos/EquipmentTable';
 import { EquipmentForm } from '../components/equipos/EquipmentForm';
@@ -9,9 +9,17 @@ import { SecuritySnapshot, SecuritySnapshotSkeleton } from '@/features/security/
 import { useLatestSecurity } from '@/features/security/hooks/useSecurity';
 import { PerformanceSnapshot, PerformanceSnapshotSkeleton } from '@/features/performance/components/snapshot/PerformanceSnapshot';
 import { useLatestPerformance } from '@/features/performance/hooks/usePerformance';
-import { Monitor, Filter, Search, Plus } from 'lucide-react';
+import { Monitor, Search, Plus, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { useLaboratories } from '../hooks/useLaboratory';
 import {
     Dialog,
     DialogContent,
@@ -37,7 +45,30 @@ export default function EquiposPage() {
     const [selectedHardwareEquipment, setSelectedHardwareEquipment] = useState<EquipmentResponse | null>(null);
     const [selectedSecurityEquipment, setSelectedSecurityEquipment] = useState<EquipmentResponse | null>(null);
     const [selectedPerformanceEquipment, setSelectedPerformanceEquipment] = useState<EquipmentResponse | null>(null);
-    const { equipments, loading, refetch } = useEquipments();
+
+    // ── Filtros ──────────────────────────────────────────────────
+    const [searchInput, setSearchInput] = useState('');
+    const [labId, setLabId] = useState<number | undefined>(undefined);
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+
+    useEffect(() => {
+        const t = setTimeout(() => setDebouncedSearch(searchInput.trim() || ''), 400);
+        return () => clearTimeout(t);
+    }, [searchInput]);
+
+    const { laboratories } = useLaboratories();
+    const hasFilters = !!debouncedSearch || !!labId;
+
+    const clearFilters = () => {
+        setSearchInput('');
+        setDebouncedSearch('');
+        setLabId(undefined);
+    };
+
+    const { equipments, loading, refetch } = useEquipments({
+        search: debouncedSearch || undefined,
+        labId,
+    });
     const { snapshot: hardwareSnapshot, loading: hardwareLoading } = useLatestHardware(
         selectedHardwareEquipment?.id ?? 0
     );
@@ -70,17 +101,48 @@ export default function EquiposPage() {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <div className="relative w-64">
+                <div className="flex items-center gap-2 flex-wrap">
+                    {/* Search */}
+                    <div className="relative w-56">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
                             placeholder="Buscar por nombre o código..."
                             className="pl-10 bg-white dark:bg-[#16161a] border-gray-200 dark:border-[#1F1F23]"
+                            value={searchInput}
+                            onChange={e => setSearchInput(e.target.value)}
                         />
                     </div>
-                    <Button variant="outline" size="icon" className="border-gray-200 dark:border-[#1F1F23]">
-                        <Filter className="h-4 w-4" />
-                    </Button>
+
+                    {/* Lab filter */}
+                    <Select
+                        value={labId ? String(labId) : 'all'}
+                        onValueChange={v => setLabId(v === 'all' ? undefined : Number(v))}
+                    >
+                        <SelectTrigger className="w-44 bg-white dark:bg-[#16161a] border-gray-200 dark:border-[#1F1F23]">
+                            <SelectValue placeholder="Laboratorio" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Todos los labs</SelectItem>
+                            {laboratories.map(lab => (
+                                <SelectItem key={lab.id} value={String(lab.id)}>
+                                    {lab.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Clear filters */}
+                    {hasFilters && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="gap-1.5 text-gray-500 hover:text-gray-800"
+                            onClick={clearFilters}
+                        >
+                            <X className="h-3.5 w-3.5" />
+                            Limpiar
+                        </Button>
+                    )}
 
                     <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
                         <DialogTrigger asChild>

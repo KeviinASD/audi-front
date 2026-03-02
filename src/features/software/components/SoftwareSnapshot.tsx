@@ -18,12 +18,15 @@ import {
     AlertTriangle,
     CalendarClock,
     CheckCircle2,
+    Gift,
+    HelpCircle,
     Info,
     Package,
     Search,
     ShieldAlert,
     ShieldCheck,
     ShieldOff,
+    XCircle,
 } from 'lucide-react';
 import {
     Tooltip,
@@ -34,18 +37,22 @@ import {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const licenseConfig: Record<LicenseStatus, { label: string; className: string }> = {
+    [LicenseStatus.FREE]:       { label: 'Gratuito',      className: 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400'                  },
     [LicenseStatus.LICENSED]:   { label: 'Licenciado',    className: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' },
     [LicenseStatus.UNLICENSED]: { label: 'Sin licencia',  className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'                 },
     [LicenseStatus.UNKNOWN]:    { label: 'Desconocido',   className: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'                 },
 };
 
-type FilterKey = 'all' | 'risk' | 'unlicensed' | 'not-whitelisted';
+type FilterKey = 'all' | 'risk' | 'not-whitelisted' | 'licensed' | 'free' | 'unlicensed' | 'unknown';
 
 const filterFns: Record<FilterKey, (s: SoftwareInstalledResponse) => boolean> = {
     'all':             () => true,
     'risk':            (s) => s.isRisk,
-    'unlicensed':      (s) => s.licenseStatus === LicenseStatus.UNLICENSED,
     'not-whitelisted': (s) => !s.isWhitelisted,
+    'licensed':        (s) => s.licenseStatus === LicenseStatus.LICENSED,
+    'free':            (s) => s.licenseStatus === LicenseStatus.FREE,
+    'unlicensed':      (s) => s.licenseStatus === LicenseStatus.UNLICENSED,
+    'unknown':         (s) => s.licenseStatus === LicenseStatus.UNKNOWN,
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -65,7 +72,10 @@ export const SoftwareSnapshot = ({ equipmentId, equipmentName }: SoftwareSnapsho
     const stats = useMemo(() => ({
         total:          software.length,
         risk:           software.filter(s => s.isRisk).length,
+        free:           software.filter(s => s.licenseStatus === LicenseStatus.FREE).length,
+        licensed:       software.filter(s => s.licenseStatus === LicenseStatus.LICENSED).length,
         unlicensed:     software.filter(s => s.licenseStatus === LicenseStatus.UNLICENSED).length,
+        unknown:        software.filter(s => s.licenseStatus === LicenseStatus.UNKNOWN).length,
         notWhitelisted: software.filter(s => !s.isWhitelisted).length,
     }), [software]);
 
@@ -132,11 +142,34 @@ export const SoftwareSnapshot = ({ equipmentId, equipmentName }: SoftwareSnapsho
                         <p className="text-xl font-bold text-red-700 dark:text-red-400">{stats.risk}</p>
                     </div>
                 </div>
-                <div className="p-3 rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-900/10 flex items-center gap-3">
-                    <ShieldOff className="h-5 w-5 text-amber-500" />
-                    <div>
-                        <p className="text-xs text-amber-600 dark:text-amber-400">Sin licencia</p>
-                        <p className="text-xl font-bold text-amber-700 dark:text-amber-400">{stats.unlicensed}</p>
+                <div className="p-3 rounded-xl border border-gray-200 dark:border-[#1F1F23] bg-white dark:bg-[#16161a] col-span-2">
+                    <div className="flex items-center gap-1.5 mb-3">
+                        <ShieldOff className="h-3.5 w-3.5 text-gray-400" />
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                            Estado de licencias
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                        <div className="flex flex-col gap-1.5 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/15 border border-emerald-100 dark:border-emerald-900/30">
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                            <span className="text-xl font-bold text-emerald-700 dark:text-emerald-400 leading-none">{stats.licensed}</span>
+                            <span className="text-[11px] text-emerald-600/80 dark:text-emerald-500/80 leading-tight">Licenciado</span>
+                        </div>
+                        <div className="flex flex-col gap-1.5 p-2.5 rounded-lg bg-sky-50 dark:bg-sky-900/15 border border-sky-100 dark:border-sky-900/30">
+                            <Gift className="h-3.5 w-3.5 text-sky-500" />
+                            <span className="text-xl font-bold text-sky-700 dark:text-sky-400 leading-none">{stats.free}</span>
+                            <span className="text-[11px] text-sky-600/80 dark:text-sky-500/80 leading-tight">Gratuito</span>
+                        </div>
+                        <div className="flex flex-col gap-1.5 p-2.5 rounded-lg bg-red-50 dark:bg-red-900/15 border border-red-100 dark:border-red-900/30">
+                            <XCircle className="h-3.5 w-3.5 text-red-500" />
+                            <span className="text-xl font-bold text-red-700 dark:text-red-400 leading-none">{stats.unlicensed}</span>
+                            <span className="text-[11px] text-red-600/80 dark:text-red-500/80 leading-tight">Sin licencia</span>
+                        </div>
+                        <div className="flex flex-col gap-1.5 p-2.5 rounded-lg bg-amber-50 dark:bg-amber-900/15 border border-amber-100 dark:border-amber-900/30">
+                            <HelpCircle className="h-3.5 w-3.5 text-amber-500" />
+                            <span className="text-xl font-bold text-amber-700 dark:text-amber-400 leading-none">{stats.unknown}</span>
+                            <span className="text-[11px] text-amber-600/80 dark:text-amber-500/80 leading-tight">Sin confirmar</span>
+                        </div>
                     </div>
                 </div>
                 <div className="p-3 rounded-lg border border-blue-200 dark:border-blue-900/40 bg-blue-50 dark:bg-blue-900/10 flex items-center gap-3">
@@ -149,7 +182,7 @@ export const SoftwareSnapshot = ({ equipmentId, equipmentName }: SoftwareSnapsho
             </div>
 
             {/* Filters + search */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
@@ -159,23 +192,69 @@ export const SoftwareSnapshot = ({ equipmentId, equipmentName }: SoftwareSnapsho
                         onChange={e => setSearch(e.target.value)}
                     />
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                    {([
-                        { key: 'all',             label: `Todo (${stats.total})`             },
-                        { key: 'risk',            label: `Riesgo (${stats.risk})`            },
-                        { key: 'unlicensed',      label: `Sin licencia (${stats.unlicensed})` },
-                        { key: 'not-whitelisted', label: `No autorizado (${stats.notWhitelisted})` },
-                    ] as const).map(({ key, label }) => (
-                        <Button
-                            key={key}
-                            variant={activeFilter === key ? 'default' : 'outline'}
-                            size="sm"
-                            className="h-7 text-xs"
-                            onClick={() => setActiveFilter(key)}
-                        >
-                            {label}
-                        </Button>
-                    ))}
+
+                {/* General filters */}
+                <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                        General
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                        {([
+                            { key: 'all',             label: `Todo`,           count: stats.total          },
+                            { key: 'risk',            label: `En riesgo`,      count: stats.risk           },
+                            { key: 'not-whitelisted', label: `No autorizado`,  count: stats.notWhitelisted },
+                        ] as const).map(({ key, label, count }) => (
+                            <Button
+                                key={key}
+                                variant={activeFilter === key ? 'default' : 'outline'}
+                                size="sm"
+                                className="h-7 text-xs gap-1.5"
+                                onClick={() => setActiveFilter(key)}
+                            >
+                                {label}
+                                <span className={`rounded-full px-1.5 py-0 text-[10px] font-bold leading-4 ${
+                                    activeFilter === key
+                                        ? 'bg-white/20 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                                }`}>
+                                    {count}
+                                </span>
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* License filters */}
+                <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                        Licencia
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                        {([
+                            { key: 'licensed',   label: 'Licenciado',   count: stats.licensed,   dot: 'bg-emerald-500' },
+                            { key: 'free',       label: 'Gratuito',     count: stats.free,        dot: 'bg-sky-500'     },
+                            { key: 'unlicensed', label: 'Sin licencia', count: stats.unlicensed,  dot: 'bg-red-500'     },
+                            { key: 'unknown',    label: 'Sin confirmar',count: stats.unknown,     dot: 'bg-amber-500'   },
+                        ] as const).map(({ key, label, count, dot }) => (
+                            <Button
+                                key={key}
+                                variant={activeFilter === key ? 'default' : 'outline'}
+                                size="sm"
+                                className="h-7 text-xs gap-1.5"
+                                onClick={() => setActiveFilter(key)}
+                            >
+                                <span className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
+                                {label}
+                                <span className={`rounded-full px-1.5 py-0 text-[10px] font-bold leading-4 ${
+                                    activeFilter === key
+                                        ? 'bg-white/20 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                                }`}>
+                                    {count}
+                                </span>
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             </div>
 

@@ -5,21 +5,24 @@ import type { EquipmentResponse, CreateEquipmentRequest, UpdateEquipmentRequest 
 
 // ── GET ALL ──────────────────────────────────────────────────────────────────
 
-export function useEquipments() {
+export function useEquipments(params?: { search?: string; labId?: number }) {
     const [equipments, setEquipments] = useState<EquipmentResponse[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const search = params?.search;
+    const labId  = params?.labId;
 
     const fetchAll = useCallback(async () => {
         setLoading(true);
         try {
-            const data = await EquipmentService.getAll();
+            const data = await EquipmentService.getAll({ search, labId });
             setEquipments(data);
         } catch {
             toast.error('Error al cargar equipos');
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [search, labId]);
 
     useEffect(() => {
         fetchAll();

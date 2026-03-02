@@ -4,8 +4,8 @@ import type { EquipmentResponse, CreateEquipmentRequest, UpdateEquipmentRequest 
 const BASE_URL = '/equipment';
 
 export class EquipmentService {
-    static async getAll(): Promise<EquipmentResponse[]> {
-        const res = await api.get<EquipmentResponse[]>(BASE_URL);
+    static async getAll(params?: { search?: string; labId?: number }): Promise<EquipmentResponse[]> {
+        const res = await api.get<EquipmentResponse[]>(BASE_URL, { params });
         return res.data;
     }
 
