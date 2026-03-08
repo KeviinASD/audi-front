@@ -185,7 +185,7 @@ export default function EquipmentDetailPage() {
         setAiState('loading');
         setAiError(null);
         try {
-            const report = await AnalysisService.requestAiAnalysis(data.equipment.id, date);
+            const report = await AnalysisService.requestAiAnalysis({ equipmentId: data.equipment.id, date });
             setAiReport(report);
             setAiState('done');
         } catch {

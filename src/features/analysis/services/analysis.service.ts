@@ -22,15 +22,17 @@ export class AnalysisService {
         return res.data;
     }
 
-    static async requestAiAnalysis(
-        equipmentId: string,
-        date: string,
-        autoCreateFindings = true,
-    ): Promise<AiAuditReportResponse> {
+    static async requestAiAnalysis(params: {
+        equipmentId?: string | number;
+        laboratoryId?: string | number;
+        date: string;
+        autoCreateFindings?: boolean;
+    }): Promise<AiAuditReportResponse> {
+        const { autoCreateFindings = true, ...rest } = params;
         // Claude puede tardar hasta ~60 s — se sobreescribe el timeout solo para esta petición
         const res = await api.post<AiAuditReportResponse>(
             '/audit-analysis/ai',
-            { equipmentId, date, autoCreateFindings },
+            { ...rest, autoCreateFindings },
             { timeout: 120_000 },   // 2 minutos
         );
         return res.data;
