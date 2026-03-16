@@ -4,6 +4,7 @@ import { PrivateRoute } from '../routes/PrivateRoute'
 import { PublicRoute } from '../routes/PublicRoute'
 import DashLayout from '../layouts/dash2/DashLayout'
 
+import DashboardPage from '@/features/dashboard/pages/DashboardPage'
 import EquiposPage from '@/features/equipos/pages/EquiposPage'
 import LabsPage from '@/features/equipos/pages/LabsPage'
 import AuthorizedSoftwarePage from '@/features/software/pages/AuthorizedSoftwarePage'
@@ -37,7 +38,7 @@ export const router: RouteObject[] = [
             </PrivateRoute>
         ),
         children: [
-            { path: 'dashboard', element: <h1 className='text-xs'>DASHBOARD HOME :3</h1> },
+            { path: 'dashboard', element: <DashboardPage /> },
             { path: 'equipos', element: <EquiposPage /> },
             { path: 'laboratorios', element: <LabsPage /> },
             { path: 'software', element: <AuthorizedSoftwarePage /> },
@@ -45,6 +46,8 @@ export const router: RouteObject[] = [
             { path: 'hardware/historial/:equipmentId', element: <HardwareHistoryPage /> },
             { path: 'security', element: <SecurityRisksPage /> },
             { path: 'security/historial/:equipmentId', element: <SecurityHistoryPage /> },
+            { path: 'seguridad', element: <SecurityRisksPage /> },
+            { path: 'seguridad/historial/:equipmentId', element: <SecurityHistoryPage /> },
             { path: 'performance', element: <PerformanceAlertsPage /> },
             { path: 'performance/historial/:equipmentId', element: <PerformanceHistoryPage /> },
             { path: 'analysis', element: <AnalysisPage /> },

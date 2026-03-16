@@ -1,6 +1,6 @@
 import type { LaboratoryResponse } from './laboratory.interface';
 
-export type EquipmentStatus = 'operativo' | 'degradado' | 'critico' | 'sin-datos';
+export type EquipmentStatus = 'operativo' | 'degradado' | 'critico' | 'conectado' | 'sin-datos';
 
 export interface EquipmentResponse {
     id: number;

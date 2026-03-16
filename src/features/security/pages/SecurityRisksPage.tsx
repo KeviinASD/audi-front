@@ -75,20 +75,22 @@ function RiskTable({
                                     <Monitor className="h-4 w-4 text-gray-500" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{eq.name}</p>
-                                    <p className="text-xs text-gray-400 font-mono">{eq.code}</p>
+                                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        {eq.name?.trim() || eq.code || 'Sin nombre'}
+                                    </p>
+                                    <p className="text-xs text-gray-400 font-mono">{eq.code || '—'}</p>
                                 </div>
                             </div>
                         </TableCell>
                         <TableCell>
                             <div className="flex items-center gap-1.5 text-sm text-gray-500">
                                 <MapPin className="h-3 w-3" />
-                                {eq.ubication || <span className="italic text-gray-400">Sin ubicación</span>}
+                                {(eq.ubication && eq.ubication.trim()) ? eq.ubication : <span className="italic text-gray-400">Sin ubicación</span>}
                             </div>
                         </TableCell>
                         <TableCell>
                             <Badge variant="outline" className="text-xs capitalize">
-                                {eq.status}
+                                {eq.status?.trim() || '—'}
                             </Badge>
                         </TableCell>
                         <TableCell className="text-right">
