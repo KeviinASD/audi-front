@@ -16,6 +16,8 @@ import PerformanceAlertsPage from '@/features/performance/pages/PerformanceAlert
 import PerformanceHistoryPage from '@/features/performance/pages/PerformanceHistoryPage'
 import AnalysisPage from '@/features/analysis/pages/AnalysisPage'
 import EquipmentDetailPage from '@/features/analysis/pages/EquipmentDetailPage'
+import ThresholdsPage from '@/features/governance/pages/ThresholdsPage'
+import CompliancePage from '@/features/governance/pages/CompliancePage'
 
 export const router: RouteObject[] = [
     {
@@ -52,6 +54,8 @@ export const router: RouteObject[] = [
             { path: 'performance/historial/:equipmentId', element: <PerformanceHistoryPage /> },
             { path: 'analysis', element: <AnalysisPage /> },
             { path: 'analysis/equipo/:equipmentId', element: <EquipmentDetailPage /> },
+            { path: 'gobierno/umbrales', element: <ThresholdsPage /> },
+            { path: 'gobierno/cumplimiento', element: <CompliancePage /> },
             { path: 'employee', element: <h1 className='text-xs'>DASHBOARD EMPLOYEE :3</h1> },
         ]
     }

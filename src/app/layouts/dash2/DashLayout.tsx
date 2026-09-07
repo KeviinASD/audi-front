@@ -41,7 +41,13 @@ export default function DashLayout() {
             <DashSidebar />
             <SidebarInset>
                 <HeaderLayout />
-                <div className="flex-1 min-h-[calc(100vh-4rem)]">
+                {/*
+                  min-w-0 es obligatorio: SidebarInset es flex, y un flex item
+                  tiene min-width:auto por defecto, así que no se encoge por
+                  debajo de su contenido. Sin esto, cualquier contenido ancho
+                  (tablas, tabs, grids) desborda y se corta a la derecha.
+                */}
+                <div className="flex-1 min-w-0 min-h-[calc(100vh-4rem)] overflow-x-hidden">
                     <Outlet />
                 </div>
             </SidebarInset>

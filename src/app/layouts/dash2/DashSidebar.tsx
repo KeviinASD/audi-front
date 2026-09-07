@@ -27,6 +27,9 @@ import {
     Settings,
     MoreVertical,
     Activity,
+    Scale,
+    SlidersHorizontal,
+    Gauge,
 } from "lucide-react"
 
 import {
@@ -82,21 +85,34 @@ const navigationItems: NavigationItem[] = [
     { id: "equipos", name: "Equipos", icon: Monitor, href: "/main/equipos" },
     { id: "laboratorios", name: "Laboratorios", icon: Building2, href: "/main/laboratorios" },
     { id: "analisis", name: "Análisis", icon: Activity, href: "/main/analysis" },
-    { id: "reportes", name: "Reportes (Ingest)", icon: FileText, href: "/main/reportes" },
+    {
+        id: "gobierno-nav",
+        name: "Gobierno de TI",
+        icon: Scale,
+        href: "/main/gobierno",
+        children: [
+            { id: "umbrales", name: "Umbrales", icon: SlidersHorizontal, href: "/main/gobierno/umbrales" },
+            { id: "cumplimiento-gob", name: "Cumplimiento", icon: ClipboardCheck, href: "/main/gobierno/cumplimiento" },
+        ],
+    },
     {
         id: "auditoria",
         name: "Auditoría",
         icon: ShieldCheck,
         href: "/main/auditoria",
         children: [
-            { id: "seguridad", name: "Seguridad", icon: Shield, href: "/main/seguridad" },
+            { id: "seguridad", name: "Seguridad", icon: Shield, href: "/main/security" },
             { id: "software", name: "Software & Procesos", icon: Cpu, href: "/main/software" },
-            { id: "cumplimiento", name: "Cumplimiento", icon: ClipboardCheck, href: "/main/cumplimiento" },
+            { id: "performance", name: "Rendimiento", icon: Gauge, href: "/main/performance" },
         ],
     },
-    { id: "usuarios", name: "Usuarios", icon: Users, href: "/main/usuarios" },
-    { id: "api-keys", name: "API Keys", icon: Key, href: "/main/api-keys" },
 ]
+
+// Retirados del nav por no tener ruta asociada — reincorporar al implementarlas:
+//   Reportes (Ingest)  → /main/reportes
+//   Cumplimiento       → /main/cumplimiento   (distinto de /main/gobierno/cumplimiento)
+//   Usuarios           → /main/usuarios
+//   API Keys           → /main/api-keys
 
 
 const versions = ["1.0.0", "0.9.0", "0.8.0", "0.7.0"]
